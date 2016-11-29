@@ -6,20 +6,18 @@ import java.util.concurrent.{LinkedBlockingQueue, TimeUnit, ThreadPoolExecutor, 
 import org.apache.curator.framework.CuratorFrameworkFactory
 import org.apache.curator.retry.ExponentialBackoffRetry
 import org.apache.spark.SparkContext
+import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.codehaus.jackson.map.ObjectMapper
 
 /**
  * Created by shashidhar on 22/11/16.
  */
-object ZookeeperListenerMain {
+object StreamingListenerMain {
   def main(args: Array[String]) {
 
     val objectMapper = new ObjectMapper
 
     val executorService = new ThreadPoolExecutor(10,100, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue[Runnable])
-    executorService.allowCoreThreadTimeOut(true)
-
-    executorService.submit(Thread.currentThread())
 
     val zkConnectionString = "localhost:2181"
 
@@ -30,14 +28,18 @@ object ZookeeperListenerMain {
 
     client.start()
 
-    val source = new ZookeeperConfigSource(client,configPath)
-
-    val listener = new ZookeeperUpdateListener(source)
-
-    listener.init()
+    executorService.submit(new ListenerHandler(new ZookeeperConfigSource(client,configPath),new StreamingDriver()))
 
   }
 
+}
 
+class ListenerHandler(source:ZookeeperConfigSource,streamingDriver:StreamingDriver) extends Runnable
+{
+  override def run(): Unit = {
+    val listener = new ZookeeperUpdateListener(source,streamingDriver)
+    listener.init()
+    streamingDriver.startContext("initial dummy data")
+  }
 }
 

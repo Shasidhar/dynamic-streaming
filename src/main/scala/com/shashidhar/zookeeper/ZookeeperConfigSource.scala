@@ -27,12 +27,8 @@ class ZookeeperConfigSource(val client:CuratorFramework,
   }
 
   def start(): Unit ={
-    println("inside ZookeeperConfigSource start")
     pathChildrenCache.getListenable.addListener(new PathChildrenCacheListener {
       override def childEvent(client: CuratorFramework, event: PathChildrenCacheEvent): Unit ={
-
-        println("inside event")
-
         val eventType = event.getType
         val data = event.getData
 
@@ -69,7 +65,6 @@ class ZookeeperConfigSource(val client:CuratorFramework,
 
 
  def fireEvent(result:WatchedUpdateResult):Unit= {
-   println("updated listeners")
     for(l<-listeners){
       l.updateConfiguration(result)
     }
