@@ -16,7 +16,7 @@ object NodeCacheDemo {
       new ExponentialBackoffRetry(1000, 3))
     client.start()
 
-    val znodePath = "/test"
+    val znodePath = "/meetup/test"
     println("original data:"+new String(client.getData.forPath(znodePath)))
 
     /* Zookeeper NodeCache service to get properties from ZNode */
@@ -34,7 +34,6 @@ object NodeCacheDemo {
       nodeCache.start()
     })
   }
-
   val executorService = Executors.newFixedThreadPool(10)
   executorService.submit(Thread.currentThread())
 }
