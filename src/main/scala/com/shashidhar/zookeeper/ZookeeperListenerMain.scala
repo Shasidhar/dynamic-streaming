@@ -23,7 +23,7 @@ object ZookeeperListenerMain {
 
     val zkConnectionString = "localhost:2181"
 
-    val configPath = "/test"
+    val configPath = "/meetup/pathcahce"
 
     val client = CuratorFrameworkFactory.newClient(zkConnectionString,
       new ExponentialBackoffRetry(1000, 3))
