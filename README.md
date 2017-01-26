@@ -12,7 +12,7 @@ Interactive data analysis with Spark streaming session code repo
 
  * Load project into IDE (eclipse/intellij) as a Maven Project
  * Create a zNode in path */meetup/streaming*
- * Go to -> ZookeeperListenerMain.scala to run from IDE as main program
+ * Go to -> StreamingListenerMain.scala to run from IDE as main program
  * Once you start main program, add/delete a node under */meetup/streaming*
  * When ever data changes you should see streaming context is restarted and printing the latest data from Zookeeper into IDE console
  
